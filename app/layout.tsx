@@ -27,7 +27,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="h-2/6 w-3xl bg-background text-foreground">asd</div>
       </body>
     </html>
   );
