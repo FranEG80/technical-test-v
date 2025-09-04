@@ -1,8 +1,8 @@
-import { prisma } from '@/server/db/db';
-import { UserRepository } from '../domain/UserRepository';
-import { User } from '../domain/User';
+import { prisma } from '@/server/db';
+import { UserRepository } from '../domain/repositories/UserRepository';
+import { User } from '../domain/entities/UserEntity';
 import { toDomain, toPrismaData } from './mappers';
-import { Email } from '../domain/Email';
+import { Email } from '../domain/valueObjects/EmailValueObject';
 
 export class PrismaUserRepository implements UserRepository {
   async list(): Promise<User[]> {

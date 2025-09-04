@@ -1,32 +1,32 @@
-import { UserRepository } from '../domain/UserRepository';
-import { Email } from '../domain/Email';
-import { UserAlreadyExistsError } from '../domain/errors'; // si lo tienes
-import { User } from '../domain/User';
+import { UserRepository } from '../domain/repositories/UserRepository';
+import { Email } from '../domain/valueObjects/EmailValueObject';
+import { UserAlreadyExistsError, UserNotFoundError } from '../domain/errors';
+import { User } from '../domain/entities/UserEntity';
 
 type Input = { id: string; name?: string; email?: string };
 
 export class UpdateUser {
-  constructor(private repo: UserRepository) {}
+  constructor(private user: UserRepository) {}
 
   async execute({ id, name, email }: Input): Promise<User> {
-    const existing = await this.repo.existsById(id);
+    const existing = await this.user.existsById(id);
     if (!existing) {
-      throw new Error('User not found'); // o UserNotFoundError
+      throw new UserNotFoundError(id);
     }
 
     const changes: { name?: string; email?: string } = {};
     if (typeof name === 'string') changes.name = name.trim();
 
     if (typeof email === 'string') {
-      const vo = Email.create(email);                 // valida formato en dominio
-      const sameEmailOwner = await this.repo.findByEmail(vo.value);
+      const valueObject = Email.create(email);
+      const sameEmailOwner = await this.user.findByEmail(valueObject.value);
       if (sameEmailOwner && sameEmailOwner.props.id !== id) {
-        throw new UserAlreadyExistsError(vo.value);
+        throw new UserAlreadyExistsError(valueObject.value);
       }
-      changes.email = vo.value;
+      changes.email = valueObject.value;
     }
 
-    const updated = await this.repo.updateById(id, changes);
+    const updated = await this.user.updateById(id, changes);
     return updated;
   }
 }

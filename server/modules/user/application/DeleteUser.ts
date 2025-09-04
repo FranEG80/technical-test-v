@@ -1,11 +1,12 @@
-import { UserRepository } from '../domain/UserRepository';
+import { UserNotFoundError } from '../domain/errors';
+import { UserRepository } from '../domain/repositories/UserRepository';
 
 export class DeleteUser {
-  constructor(private repo: UserRepository) {}
+  constructor(private user: UserRepository) {}
 
   async execute(id: string) {
-    const user = await this.repo.existsById(id);
-    if (!user) throw new Error('User not found');
-    await this.repo.deleteById(id);
+    const user = await this.user.existsById(id);
+    if (!user) throw new UserNotFoundError(id);
+    await this.user.deleteById(id);
   }
 }

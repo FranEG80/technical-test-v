@@ -1,8 +1,8 @@
-import { UserRepository } from '../domain/UserRepository';
+import { UserRepository } from '../domain/repositories/UserRepository';
 
 export class ListUsers {
-  constructor(private repo: UserRepository) {}
+  constructor(private user: UserRepository) {}
   execute() {
-    return this.repo.list(); // devuelve entidades o DTO, según prefieras
+    return this.user.list();
   }
 }
