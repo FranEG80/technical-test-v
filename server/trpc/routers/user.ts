@@ -1,12 +1,14 @@
-import { z } from 'zod';
 import { baseProcedure, createTRPCRouter } from '../init';
 import { PrismaUserRepository } from '@/server/modules/user/infrastructure/PrismaUserRepository';
+import { createUserValidator, deleteUserValidator, editUserValidator } from '@/server/modules/user/validators/userValidators';
 import { ListUsers } from '@/server/modules/user/application/ListUsers';
 import { CreateUser } from '@/server/modules/user/application/CreateUser';
 import { DeleteUser } from '@/server/modules/user/application/DeleteUser';
+import { UpdateUser } from '@/server/modules/user/application/UpdateUser';
 import { TRPCError } from '@trpc/server';
 import { InvalidEmailError, UserAlreadyExistsError, UserNotFoundError } from '@/server/modules/user/domain/errors';
-import { UpdateUser } from '@/server/modules/user/application/UpdateUser';
+
+
 
 const repo = new PrismaUserRepository();
 const listUsers = new ListUsers(repo);
@@ -21,7 +23,7 @@ export const userRouter = createTRPCRouter({
   }),
 
   create: baseProcedure
-    .input(z.object({ name: z.string().min(1), email: z.string().email() }))
+    .input(createUserValidator)
     .mutation(async ({ input }) => {
       try {
         const user = await createUser.execute(input);
@@ -33,12 +35,12 @@ export const userRouter = createTRPCRouter({
         if (err instanceof InvalidEmailError) {
           throw new TRPCError({ code: 'BAD_REQUEST', message: err.message });
         }
-        throw err; // otros errores suben tal cual
+        throw err; 
       }
     }),
 
   delete: baseProcedure
-    .input(z.object({ id: z.string().uuid() }))
+    .input(deleteUserValidator)
     .mutation(async ({ input }) => {
       try {
         await deleteUser.execute(input.id);
@@ -51,7 +53,7 @@ export const userRouter = createTRPCRouter({
     }),
 
   edit: baseProcedure
-    .input(z.object({ id: z.string().uuid(), name: z.string().min(1), email: z.string().email() }))
+    .input(editUserValidator)
     .mutation(async ({ input }) => {
       try {
         const user = await editUser.execute(input);
