@@ -62,7 +62,7 @@ function ToggleShapesEditableButton() {
         }
         const s = editor.getShape(ids[0])
         if (!s) return ids
-        let editable = !!s?.meta?.editable
+        const editable = !!s?.meta?.editable
        
         if (ids.length === 1 && ids[0] !== selected) {
           setSelected(ids[0])
