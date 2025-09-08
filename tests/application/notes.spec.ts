@@ -37,15 +37,15 @@ describe('Notes use cases', () => {
 
   it('ListUserNotebooks returns only those visible by membership', async () => {
     const create = new CreateNotebook(notebooks, users);
-    const notebok1 = await create.execute({ userId: userOwner, title: 'A', notebookId: '1' });
+    // const notebok1 = await create.execute({ userId: userOwner, title: 'A', notebookId: '1' });
     const notebok2 = await create.execute({ userId: userOwner, title: 'B', notebookId: '2' });
 
     await users.addMember(notebok2.toPrimitives().id, userEditor, 'editor');
 
     const listOwner = new ListUserNotebooks(notebooks);
     const noteboksOwner = await listOwner.execute(userOwner)
-    const noteboksEditor = await listOwner.execute(userEditor);
-    const noteboksViewer = await listOwner.execute(userViewer);
+    // const noteboksEditor = await listOwner.execute(userEditor);
+    // const noteboksViewer = await listOwner.execute(userViewer);
 
     expect(noteboksOwner.length).toBe(2);
     // expect(noteboksEditor.map((n) => n.toPrimitives().title)).toEqual(['A', 'B']);
@@ -57,20 +57,20 @@ describe('Notes use cases', () => {
     const notebok = await create.execute(notebookDemo);
 
     const add = new AddSheet(notebooks, users);
-    const notebok1 = await add.execute({
-      userId: userOwner,
-      notebookId: notebok.toPrimitives().id,
-      title: 'Hoja 1',
-      storeJson: fakeStore({ a: 1 }),
-    });
-    const notebok2 = await add.execute({
+    // const notebok1 = await add.execute({
+    //   userId: userOwner,
+    //   notebookId: notebok.toPrimitives().id,
+    //   title: 'Hoja 1',
+    //   storeJson: fakeStore({ a: 1 }),
+    // });
+    const sheetDB = await add.execute({
       userId: userOwner,
       notebookId: notebok.toPrimitives().id,
       title: 'Hoja 2',
       storeJson: fakeStore({ b: 2 }),
     });
 
-    const sheets = notebok2.toPrimitives().sheets;
+    const sheets = notebok.toPrimitives().sheets;
     expect(sheets.map((s) => s.title)).toEqual(['Hoja 1', 'Hoja 2']);
     expect(sheets.map((s) => s.order)).toEqual([1, 2]);
 
@@ -91,13 +91,13 @@ describe('Notes use cases', () => {
     const notebok = await create.execute(notebookDemo);
 
     const add = new AddSheet(notebooks, users);
-    const notebokWith = await add.execute({
+    const sheet = await add.execute({
       userId: userOwner,
       notebookId: notebok.toPrimitives().id,
       title: 'Hoja',
       storeJson: fakeStore({ x: 1 }),
     });
-    const sheetId = notebokWith.toPrimitives().sheets[0].id;
+    const sheetId = sheet.toPrimitives().id;
 
     const update = new UpdateSheet(notebooks, users);
     const notebokUpd = await update.execute({
@@ -128,26 +128,26 @@ describe('Notes use cases', () => {
     const notebok = await create.execute(notebookDemo);
     const add = new AddSheet(notebooks, users);
 
-    const notebokA = await add.execute({
+    const sheetA = await add.execute({
       userId: userOwner,
       notebookId: notebok.toPrimitives().id,
       title: '1',
       storeJson: fakeStore(),
     });
-    const notebokB = await add.execute({
+    const sheetB = await add.execute({
       userId: userOwner,
       notebookId: notebok.toPrimitives().id,
       title: '2',
       storeJson: fakeStore(),
     });
-    const notebokC = await add.execute({
+    const sheetC = await add.execute({
       userId: userOwner,
       notebookId: notebok.toPrimitives().id,
       title: '3',
       storeJson: fakeStore(),
     });
 
-    const idToDelete = notebokB.toPrimitives().sheets[1].id;
+    const idToDelete = sheetB.toPrimitives().id;
 
     const del = new DeleteSheet(notebooks, users);
     await del.execute({

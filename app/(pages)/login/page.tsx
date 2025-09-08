@@ -44,8 +44,12 @@ export default function LoginPage() {
         setError(null);
         try {
             await login({ email, name, remember });
-        } catch (err: any) {
-            setError(err?.message ?? "No se pudo iniciar sesión");
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("No se pudo iniciar sesión");
+            }
         }
     }
 

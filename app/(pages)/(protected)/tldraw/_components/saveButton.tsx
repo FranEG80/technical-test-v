@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button"
 import useTldraw from "../_hooks/useTldraw"
+import { useEditor } from "tldraw"
 
 
 export default function SaveButton() {
   const { save, loading, error } = useTldraw()
+  const editor = useEditor()
 
   function handleSave() {
-    save()
+    save(editor?.getSnapshot())
   }
 
   return (

@@ -21,7 +21,7 @@ export const notebookRouter = createTRPCRouter({
   .query(async ({ ctx, input }) => {
     console.log({PACO: ctx.userId, input});
     const data = await listUserNotebooks.execute(input.id); 
-    let notebooks = data.map(notebook => notebook.toPrimitives());
+    const notebooks = data.map(notebook => notebook.toPrimitives());
     // notebooks = notebooks.map(notebook => ({
     //   ...notebook,
     //   sheets: notebook.sheets.map(sheet => sheet.toPrimitives())
@@ -47,8 +47,8 @@ export const notebookRouter = createTRPCRouter({
       try {
         await deleteNotebook.execute({ userId: input.userId, notebookId: input.id });
         return { success: true };
-      } catch (e: any) {
-        if (e.message === 'Forbidden') throw new TRPCError({ code: 'FORBIDDEN' });
+      } catch (e: unknown) {
+        if (e instanceof Error && e.message === 'Forbidden') throw new TRPCError({ code: 'FORBIDDEN' });
         throw e;
       }
     }),

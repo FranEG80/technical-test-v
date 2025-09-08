@@ -54,7 +54,7 @@ export default function useTldraw() {
     }
 
     const saveNotebook = async () => {
-        let nbParams: NotebookParamsType = { userId: user.id, title: `${new Date().toISOString()}` };
+        const nbParams: NotebookParamsType = { userId: user.id, title: `${new Date().toISOString()}` };
         if (notebook) {
             nbParams['id'] = notebook.id;
         }
@@ -71,7 +71,7 @@ export default function useTldraw() {
         }
         if (!nb) throw new Error("Notebook is required");
 
-        let sheetParams: SheetParamsType = {
+        const sheetParams: SheetParamsType = {
             notebookId: nb.id,
             userId: user.id,
             title: `${new Date().toISOString()}`,
