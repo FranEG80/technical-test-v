@@ -6,8 +6,8 @@ import { TRPCError } from '@trpc/server';
 import { ListUserNotebooks } from '@/server/modules/notes/application/ListUserNotebooks';
 import { CreateNotebook } from '@/server/modules/notes/application/CreateNotebook';
 import { DeleteNotebook } from '@/server/modules/notes/application/DeleteNotebook';
-import { createNotebookValidator, deleteNotebookValidator } from '@/server/modules/notes/validators/notebookValidators';
-import { idValidator } from '@/server/shared/validators/idValidator';
+import { createNotebookValidator, deleteNotebookValidator } from '@/shared/validators/notes/notebookValidators';
+import { uuidValidator } from '@/shared/validators/uuidValidator';
 
 const notebooks = new PrismaNotebookRepository();
 const members = new PrismaUsersNotebooksRepository();
@@ -17,11 +17,16 @@ const deleteNotebook = new DeleteNotebook(notebooks, members);
 
 export const notebookRouter = createTRPCRouter({
   listMine: baseProcedure
-  .input(idValidator)
+  .input(z.object({ id: uuidValidator }))
   .query(async ({ ctx, input }) => {
-    console.log(ctx)
+    console.log({PACO: ctx.userId, input});
     const data = await listUserNotebooks.execute(input.id); 
-    return data.map(notebook => notebook.toPrimitives());
+    let notebooks = data.map(notebook => notebook.toPrimitives());
+    // notebooks = notebooks.map(notebook => ({
+    //   ...notebook,
+    //   sheets: notebook.sheets.map(sheet => sheet.toPrimitives())
+    // }));
+    return notebooks;
   }),
 
   create: baseProcedure
@@ -34,6 +39,7 @@ export const notebookRouter = createTRPCRouter({
       });
       return notebook.toPrimitives();
     }),
+  
 
   delete: baseProcedure
     .input(deleteNotebookValidator)

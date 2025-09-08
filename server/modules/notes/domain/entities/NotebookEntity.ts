@@ -1,4 +1,4 @@
-import { StoreJson } from '../../shared/types';
+import { StoreJson } from '@/shared/types';
 import { Sheet } from './SheetEntity';
 
 export interface NotebookProps {

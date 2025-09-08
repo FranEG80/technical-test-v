@@ -4,12 +4,20 @@ import { initTRPC } from '@trpc/server';
 import { prisma } from '@/server/db';
 import superjson from 'superjson';
 import { ZodError, z } from 'zod';
+import { cookies, headers } from 'next/headers';
 
 export type FieldErrors = Record<string, string[]> | null;
 export type TRPCContext = Awaited<ReturnType<typeof createTRPCContext>>;
 
 export const createTRPCContext = cache(async () => {
-  return { prisma };
+  const cookieStore = await cookies();
+  const headersBag = await headers();
+  const userIdFromCookie = cookieStore.get('uid')?.value ?? null;
+  const userIdFromHeader = headersBag.get('x-user-id'); 
+
+  const userId = userIdFromCookie ?? userIdFromHeader ?? null;
+
+  return { prisma, userId };
 });
 
 function issuesToFieldErrors(issues: z.ZodIssue[]): Record<string, string[]> {

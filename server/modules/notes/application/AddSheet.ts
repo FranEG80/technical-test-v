@@ -1,7 +1,8 @@
+import { StoreJson } from "@/shared/types";
 import { ForbiddenNotebookAccessError, NotebookNotFoundError } from "../domain/errors";
 import { NotebookRepository } from "../domain/repositories/NotebookRepository";
 import { UsersNotebooksRepository } from "../domain/repositories/UsersNotebooksRepository";
-import { AddSheetInput, StoreJson } from "../shared/types";
+import { AddSheetInput } from "../shared/types";
 
 export class AddSheet {
   constructor(
@@ -16,9 +17,9 @@ export class AddSheet {
     const notebook = await this.notebooks.findById(input.notebookId);
     if (!notebook) throw new NotebookNotFoundError(input.notebookId);
 
-    notebook.addSheet({ title: input.title, storeJson: input.storeJson });
+    const sheet = notebook.addSheet({ title: input.title, storeJson: input.storeJson });
     await this.notebooks.save(notebook);
-    return notebook;
+    return sheet;
   }
 }
 

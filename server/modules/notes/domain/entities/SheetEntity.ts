@@ -1,4 +1,4 @@
-import { StoreJson } from "../../shared/types";
+import { StoreJson } from "@/shared/types";
 
 export interface SheetProps {
   id: string;

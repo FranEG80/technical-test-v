@@ -1,7 +1,7 @@
-import type { StoreJson } from '@/server/modules/notes/shared/types/sheetTypes';
 import { Prisma } from '@/server/lib/generated/prisma';
 import { Sheet } from '../domain/entities/SheetEntity';
 import { Notebook } from '../domain/entities/NotebookEntity';
+import { StoreJson } from '@/shared/types';
 
 export function toDomainStore(json: Prisma.JsonValue): StoreJson {
   return json as unknown as StoreJson;
