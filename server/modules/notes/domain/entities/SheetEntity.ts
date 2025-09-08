@@ -12,9 +12,9 @@ export interface SheetProps {
 export class Sheet {
   private constructor(readonly props: SheetProps) {}
 
-  static createNew(params: { title: string; storeJson: StoreJson; order: number }): Sheet {
+  static createNew(params: { title: string; storeJson: StoreJson; order: number, id?: string }): Sheet {
     return new Sheet({
-      id: crypto.randomUUID(),
+      id: params.id ?? crypto.randomUUID(),
       title: params.title.trim(),
       storeJson: params.storeJson,
       order: params.order,

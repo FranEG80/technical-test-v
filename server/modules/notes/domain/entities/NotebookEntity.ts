@@ -45,16 +45,19 @@ export class Notebook {
     };
   }
 
-  addSheet(params: { title: string; storeJson: StoreJson }) {
+  addSheet(params: { title: string; storeJson: StoreJson, id?: string }): Sheet {
     const maxOrder = this.props.sheets.length
       ? Math.max(...this.props.sheets.map(sheet => sheet.props.order))
       : 0;
     const sheet = Sheet.createNew({
+      id: params.id,
       title: params.title,
       storeJson: params.storeJson,
       order: maxOrder + 1,
     });
-    this.props.sheets.push(sheet);
+    if (!this.props.sheets.find(s => s.props.id === sheet.props.id)) {
+      this.props.sheets.push(sheet);
+    }
     this.touch();
     return sheet;
   }

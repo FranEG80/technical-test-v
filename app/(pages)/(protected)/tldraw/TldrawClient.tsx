@@ -7,9 +7,9 @@ declare global {
     editor?: Editor;
   }
 }
-import { Tldraw, DefaultSpinner } from 'tldraw'
+import { Tldraw, DefaultSpinner, createTLStore } from 'tldraw'
 import type { Editor } from 'tldraw'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../../_hooks/useAuth'
 import useTldraw from './_hooks/useTldraw'
 import useEditor from './_hooks/useEditor';
@@ -23,10 +23,12 @@ export default function TldrawClient() {
 
   function handleMount(editor: Editor) {
     if (!user) throw new Error("User is required");
-
     const remote = data.snapshot
     if (remote) {
-      editor.loadSnapshot(remote)
+      window.setTimeout(() => {
+        editor.loadSnapshot(remote)
+      }, 500)
+      console.log("Loaded remote snapshot", remote)
     }
 
     let last = ''
@@ -66,6 +68,7 @@ export default function TldrawClient() {
     return () => cleanerEditor();
   }, []);
   
+  console.log({error, loading, snapshot: data?.snapshot})
   return (
     <div className='h-screen w-full'>
         {
@@ -73,7 +76,7 @@ export default function TldrawClient() {
             ? <p className="text-sm text-red-600 mt-2 text-center">{error.message}</p>
             : loading 
               ? <DefaultSpinner /> 
-              : <Tldraw  onMount={handleMount}  persistenceKey="demo-vidext" />
+              : <Tldraw  onMount={handleMount} />
         }
     </div>
   );

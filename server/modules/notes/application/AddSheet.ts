@@ -17,7 +17,7 @@ export class AddSheet {
     const notebook = await this.notebooks.findById(input.notebookId);
     if (!notebook) throw new NotebookNotFoundError(input.notebookId);
 
-    const sheet = notebook.addSheet({ title: input.title, storeJson: input.storeJson });
+    const sheet = notebook.addSheet({ title: input.title, storeJson: input.storeJson, id: input.id });
     await this.notebooks.save(notebook);
     return sheet;
   }

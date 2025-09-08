@@ -41,6 +41,7 @@ export default function useTldraw() {
     }
 
     const getNotebook = async () => {
+        console.log(getNotebookQuery.data)
         if (getNotebookQuery.isLoading) return;
         if (getNotebookQuery.error) throw getNotebookQuery.error;
         const notebooks = getNotebookQuery.data;
@@ -88,17 +89,17 @@ export default function useTldraw() {
 
     useEffect(() => {
         getNotebook();
-    }, []);
+    }, [getNotebookQuery]);
 
     useEffect(() => {
-        if (snapshot && getNotebookQuery.data && !saveSheetMutation.isPending) {
+        if (snapshot && getNotebookQuery.data && !getNotebookQuery.isPending) {
             saveSheet();
         }
     }, [snapshot]);
 
     return {
         save: handleSave,
-        loading: saveNotebookMutation.isPending || saveSheetMutation.isPending,
+        loading: getNotebookQuery.isPending || saveNotebookMutation.isPending || saveSheetMutation.isPending,
         error: saveNotebookMutation.error || saveSheetMutation.error,
         data: { 
             notebookId: notebook?.id, 
