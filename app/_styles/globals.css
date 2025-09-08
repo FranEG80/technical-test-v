@@ -42,8 +42,8 @@
   --foreground: oklch(0.145 0 0);
 
   /* VIDEXT STYLES */
-    --background: #000000;
-    --foreground: #ffffff;
+    --background: #ffffff;
+    --foreground: #000000;
 
     --card-foreground: hsl(0 0% 100%);
     --card: hsl(240 10% 3.9%);
