@@ -9,6 +9,9 @@ It's a web application that integrates a visual editor with
 The goal is to cover the proposed functional and technical requirements
 while maintaining a modular and easily extensible architecture.
 
+> [!NOTE]  
+> After the delivery, I fixed an issue with the button to edit shapes in the `feature/add-button-edit-shapes` branch. The result can be seen here: [technical-test-v-git-feature-add-button](https://technical-test-v-git-feature-add-button-c98ae3-franegs-projects.vercel.app/tldraw)
+
 ------------------------------------------------------------------------
 
 ## 🚀 Tech Stack
