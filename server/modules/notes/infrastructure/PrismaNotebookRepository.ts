@@ -35,17 +35,23 @@ export class PrismaNotebookRepository implements NotebookRepository {
         create: { id: dto.id, title: dto.title, createdAt: dto.createdAt },
       });
 
-      await tx.sheet.deleteMany({ where: { notebookId: dto.id } });
+      // await tx.sheet.deleteMany({ where: { notebookId: dto.id } });
       for (const sheet of dto.sheets) {
-        await tx.sheet.create({
-          data: {
-            id: sheet.id,
-            title: sheet.title,
-            storeJson: sheet.storeJson,
-            order: sheet.order,
-            createdAt: sheet.createdAt,
-            updatedAt: sheet.updatedAt,
-            notebookId: dto.id,
+        await tx.sheet.upsert({
+          where: { id: sheet.id },
+          update: { 
+            title: sheet.title, 
+            storeJson: sheet.storeJson, 
+            order: sheet.order, 
+            updatedAt: new Date() 
+          },
+          create: { 
+            id: sheet.id, 
+            title: sheet.title, 
+            storeJson: sheet.storeJson, 
+            order: sheet.order, 
+            createdAt: new Date(), 
+            notebookId: dto.id 
           },
         });
       }
