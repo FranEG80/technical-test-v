@@ -1,11 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "shadcn-prose";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
 
-  /* VIDEXT STYLES */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -40,6 +40,29 @@
   --sidebar-ring: oklch(0.708 0 0);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+
+  /* VIDEXT STYLES */
+    --background: #000000;
+    --foreground: #ffffff;
+
+    --card-foreground: hsl(0 0% 100%);
+    --card: hsl(240 10% 3.9%);
+    --popover-foreground: hsl(0 0% 100%);
+    --popover: hsl(240 10% 3.9%);
+    --primary-foreground: hsl(240 5.9% 10%);
+    --primary: hsl(0 0% 98%);
+    --secondary-foreground: hsl(240 4.8% 95.9%);
+    --secondary: hsl(240 5.9% 10%);
+    --muted-foreground: hsl(240 4.8% 95.9%);
+    --muted: hsl(240 3.8% 46.1%);
+    --vidext: hsl(73.36, 98.41%, 49.22%);
+    --accent-foreground: hsl(240, 4.8%, 95.9%);
+    --accent: hsl(240, 5.9%, 10%);
+    --destructive-foreground: hsl(0, 84.2%, 60.2%);
+    --destructive: hsl(0, 0%, 98%);
+
+    --main-bg: hsl(56, 9%, 98%, 100%);
+    
 }
 
 @theme inline {
@@ -80,6 +103,10 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --color-main: var(--main-bg);
+  --color-vidext: var(--vidext);
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -109,7 +136,12 @@
 }
 
 body {
-  font-family: var(--font-geist-sans);
+  font-family: var(--font-inter);
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .dark {
