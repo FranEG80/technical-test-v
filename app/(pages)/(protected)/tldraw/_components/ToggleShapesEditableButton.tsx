@@ -5,23 +5,15 @@ import useEditor from '../_hooks/useEditor'
 
 function ToggleShapesEditableButton() {
   const {editor} = useEditor()
-  const [unlock, setUnlock] = useState(false)
+  const [unlock, setUnlock] = useState(true)
   const [error, setError] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null)
   
-  const selectedIds = useValue(
-      "selectedIds",
-      () => {
-        if (!editor) return []
-        return editor.getSelectedShapeIds()
-      },
-      [editor]
-  ) || []
-
   const toggle = () => {
     requestAnimationFrame(() => {
       if (!editor) return
       const ids = editor.getSelectedShapeIds()
-      if (ids.length === 0) {
+      if (selectedIds.length === 0) {
         setError("No shapes selected")
         return
       }
@@ -38,10 +30,11 @@ function ToggleShapesEditableButton() {
           editor.updateShape({
             id: s.id,
             type: s.type,
-            meta: { ...(s.meta ?? {}), editable: !unlock },
+            meta: { ...(s.meta ?? {}), editable: !s.meta?.editable },
           })
+          
         })
-        setUnlock(!unlock)
+        // setUnlock(!unlock)
       })
 
       if (!unlock) {
@@ -51,6 +44,38 @@ function ToggleShapesEditableButton() {
       }
     })
   }
+
+  const selectedIds = useValue(
+      "selectedIds",
+      () => {
+        // console.log("PACO",{
+        //   selected, shape, unlock
+        // })
+        if (!editor) return []
+        const ids = editor.getSelectedShapeIds()
+        if (ids.length === 0) {
+          toggle()
+          setSelected(null)
+          setError(null)
+          setUnlock(true)
+          return []
+        }
+        const s = editor.getShape(ids[0])
+        if (!s) return ids
+        let editable = !!s?.meta?.editable
+       
+        if (ids.length === 1 && ids[0] !== selected) {
+          setSelected(ids[0])
+          setError(null)
+        }
+        if (ids.length === 1) {
+          setUnlock(!editable)
+        }
+
+        return ids
+      },
+      [editor]
+  ) || []
 
 
   const onMouseDown = (e: React.MouseEvent) => {
@@ -67,7 +92,10 @@ function ToggleShapesEditableButton() {
         onMouseDown={onMouseDown}
         disabled={selectedIds.length === 0}
         >
-        { unlock ? 'Lock shapes' : 'Unlock shapes'}
+        { selected ?
+          !unlock ? 'Lock shape' : 'Unlock shape'
+          : 'Select a shape'
+        }
       </Button>
     </>
   )
