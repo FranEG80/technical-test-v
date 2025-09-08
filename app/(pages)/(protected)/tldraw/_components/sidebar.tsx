@@ -12,6 +12,7 @@ import {
 import { items } from "../constants"
 import LogoutButton from "./logoutButton"
 import SaveButton from "./saveButton"
+import ToggleShapesEditableButton from "./ToggleShapesEditableButton"
 
 
 export function AppSidebar() {
@@ -39,6 +40,7 @@ export function AppSidebar() {
             </SidebarContent>
             <SidebarFooter>
                 <SaveButton />
+                <ToggleShapesEditableButton />
                 <LogoutButton />
             </SidebarFooter>
         </Sidebar>

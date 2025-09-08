@@ -12,12 +12,14 @@ import type { Editor } from 'tldraw'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../_hooks/useAuth'
 import useTldraw from './_hooks/useTldraw'
+import useEditor from './_hooks/useEditor';
 
 export default function TldrawClient() { 
   const { data, error, loading, save } = useTldraw()
   const { user } = useAuth();
   const [timer, setTimer] = useState<number | null>(null);
   const [unlisten, setUnlisten] = useState<(() => void) | undefined>(undefined);
+  const { setEditor } = useEditor();
 
   function handleMount(editor: Editor) {
     if (!user) throw new Error("User is required");
@@ -45,6 +47,7 @@ export default function TldrawClient() {
       { scope: 'all', source: 'user' }
     )
     setUnlisten(unlisten)
+    setEditor(editor)
     ;(window).editor = editor
   }
 

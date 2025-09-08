@@ -91,7 +91,7 @@ export default function useTldraw() {
     }, []);
 
     useEffect(() => {
-        if (snapshot) {
+        if (snapshot && getNotebookQuery.data && !saveSheetMutation.isPending) {
             saveSheet();
         }
     }, [snapshot]);
