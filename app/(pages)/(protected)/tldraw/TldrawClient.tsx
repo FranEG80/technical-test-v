@@ -1,6 +1,12 @@
 'use client'
 
 import 'tldraw/tldraw.css'
+
+declare global {
+  interface Window {
+    editor?: Editor;
+  }
+}
 import { Tldraw, DefaultSpinner } from 'tldraw'
 import type { Editor } from 'tldraw'
 import { useEffect, useState } from 'react'
@@ -39,7 +45,7 @@ export default function TldrawClient() {
       { scope: 'all', source: 'user' }
     )
     setUnlisten(unlisten)
-    ;(window as any).editor = editor
+    ;(window).editor = editor
   }
 
   const cleanerEditor = () => {

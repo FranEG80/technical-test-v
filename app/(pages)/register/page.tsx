@@ -48,8 +48,12 @@ export default function RegisterPage() {
     }
     try {
       await register({ email, name, remember: true });
-    } catch (err: any) {
-      setError(err?.message ?? "Registration failed");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Registration failed");
+      }
     }
   }
 
